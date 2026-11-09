@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "B站额外稍后再看",
+  "version": "1.0.0",
+  "description": "在 B 站视频卡片上一键加入本地自建的稍后再看列表，支持多列表、搜索与 JSON 导出备份。",
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "打开「额外稍后再看」管理页",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.bilibili.com/*",
+        "https://search.bilibili.com/*",
+        "https://space.bilibili.com/*"
+      ],
+      "js": ["lib/store.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "manager.html",
+    "open_in_tab": true
+  }
+}
