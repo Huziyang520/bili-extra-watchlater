@@ -120,11 +120,9 @@ code {
 
 /* ---------- 设置 ---------- */
 
-.settings { margin-bottom: 16px; }
-.settings-head {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-  margin-bottom: 14px; flex-wrap: wrap;
-}
+.settings { margin-bottom: 16px; padding: 0; overflow: hidden; }
+.settings-body { padding: 2px 18px 16px; }
+.settings.collapsed .settings-body { display: none; }
 .settings-grid {
   display: grid;
   grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
@@ -133,10 +131,7 @@ code {
 }
 
 .preview-wrap { min-width: 0; }
-.preview-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
-.preview-wrap.collapsed .preview-body { display: none; }
-.settings-grid.preview-hidden { grid-template-columns: minmax(0, 1fr); }
-.settings-grid.preview-hidden .settings-opts { max-width: 560px; }
+.preview-title { margin-bottom: 8px; }
 
 .stage {
   position: relative;
@@ -237,7 +232,8 @@ code {
   border-radius: 6px; background: var(--line-soft); color: var(--txt-3);
   font-size: 13px; line-height: 1; transition: transform .16s ease;
 }
-.storage:not(.collapsed) .chev { transform: rotate(90deg); }
+.storage:not(.collapsed) .chev,
+.settings:not(.collapsed) .chev { transform: rotate(90deg); }
 .head-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .head-title { font-size: 13.5px; font-weight: 600; color: var(--txt-2); transition: color .14s ease; }
 .head-sub { font-size: 12px; color: var(--txt-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

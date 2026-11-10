@@ -23,69 +23,71 @@
       </div>
     </header>
 
-    <section class="card settings">
-      <div class="settings-head">
-        <h2>页面按钮</h2>
-        <span class="muted">改动会同步到已打开的 B 站页面</span>
-      </div>
-      <div class="settings-grid">
-        <div class="preview-wrap" id="previewWrap">
-          <div class="preview-head">
-            <span class="opt-title">位置预览</span>
-            <button id="btnTogglePreview" class="btn tiny" type="button" aria-expanded="true">折叠</button>
-          </div>
-          <div class="preview-body" id="previewBody">
-            <div class="stage" id="stage">
-            <div class="stage-cover"></div>
-            <div class="stage-badge">示例视频</div>
-            <div class="pv-bar" id="pvBar">
-              <span class="pv-add">
-                <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 3.2a.8.8 0 0 1 .8.8v3.2h3.2a.8.8 0 0 1 0 1.6H8.8v3.2a.8.8 0 0 1-1.6 0V8.8H4a.8.8 0 0 1 0-1.6h3.2V4a.8.8 0 0 1 .8-.8z"/></svg>
-                <span class="pv-label">稍后</span>
-              </span>
-              <span class="pv-sep"></span>
-              <span class="pv-more">
-                <svg viewBox="0 0 16 16" aria-hidden="true">
-                  <circle cx="8" cy="3.2" r="1.5" fill="currentColor" />
-                  <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-                  <circle cx="8" cy="12.8" r="1.5" fill="currentColor" />
-                </svg>
-              </span>
-            </div>
-            <div class="stage-caption">在预览里拖动按钮调整位置，位置按卡片比例保存</div>
-          </div>
-        </div>
-      </div>
-
-        <div class="settings-opts">
-          <div class="opt-group">
-            <div class="opt-title">显示的元素</div>
-            <label class="opt"><input type="checkbox" id="optIcon" /> 加号图标</label>
-            <label class="opt"><input type="checkbox" id="optLabel" /> 「稍后」文字</label>
-            <label class="opt"><input type="checkbox" id="optMenu" /> 「⋮」列表菜单</label>
-            <p class="hint">全部不选时卡片上不显示任何按钮。</p>
-          </div>
-
-          <div class="opt-group">
-            <div class="opt-title">按钮大小 <span id="scaleVal" class="mono">1.00×</span></div>
-            <input type="range" id="optScale" class="range" min="0.7" max="1.6" step="0.05" />
-          </div>
-
-          <div class="opt-group">
-            <label class="opt"><input type="checkbox" id="optHideNative" /> 隐藏 B 站原有的「稍后再看」按钮</label>
-            <p class="hint">开启后卡片上的原版按钮不再出现，避免与「+ 稍后」重叠。</p>
-          </div>
-
-          <div class="opt-group">
-            <div class="opt-title">管理页主题</div>
-            <div class="seg" id="themeSeg">
-              <button class="seg-btn" type="button" data-theme="auto">跟随系统</button>
-              <button class="seg-btn" type="button" data-theme="light">浅色</button>
-              <button class="seg-btn" type="button" data-theme="dark">深色</button>
+    <section class="card settings collapsed" id="settingsCard">
+      <button id="settingsToggle" class="storage-head" type="button" aria-expanded="false">
+        <span class="chev" aria-hidden="true">›</span>
+        <span class="head-main">
+          <span class="head-title">页面按钮</span>
+          <span class="head-sub">位置、大小与显示项 · 改动会同步到已打开的 B 站页面</span>
+        </span>
+      </button>
+      <div class="settings-body" id="settingsBody">
+        <div class="settings-grid">
+          <div class="preview-wrap">
+            <div class="opt-title preview-title">位置预览</div>
+            <div class="preview-body">
+              <div class="stage" id="stage">
+                <div class="stage-cover"></div>
+                <div class="stage-badge">示例视频</div>
+                <div class="pv-bar" id="pvBar">
+                  <span class="pv-add">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 3.2a.8.8 0 0 1 .8.8v3.2h3.2a.8.8 0 0 1 0 1.6H8.8v3.2a.8.8 0 0 1-1.6 0V8.8H4a.8.8 0 0 1 0-1.6h3.2V4a.8.8 0 0 1 .8-.8z"/></svg>
+                    <span class="pv-label">稍后</span>
+                  </span>
+                  <span class="pv-sep"></span>
+                  <span class="pv-more">
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                      <circle cx="8" cy="3.2" r="1.5" fill="currentColor" />
+                      <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+                      <circle cx="8" cy="12.8" r="1.5" fill="currentColor" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <div class="stage-caption">在预览里拖动按钮调整位置，位置按卡片比例保存</div>
             </div>
           </div>
 
-          <button id="btnResetPos" class="btn tiny" type="button">恢复默认位置（左上角）</button>
+          <div class="settings-opts">
+            <div class="opt-group">
+              <div class="opt-title">显示的元素</div>
+              <label class="opt"><input type="checkbox" id="optIcon" /> 加号图标</label>
+              <label class="opt"><input type="checkbox" id="optLabel" /> 「稍后」文字</label>
+              <label class="opt"><input type="checkbox" id="optMenu" /> 「⋮」列表菜单</label>
+              <p class="hint">全部不选时卡片上不显示任何按钮。</p>
+            </div>
+
+            <div class="opt-group">
+              <div class="opt-title">按钮大小 <span id="scaleVal" class="mono">1.00×</span></div>
+              <input type="range" id="optScale" class="range" min="0.7" max="1.6" step="0.05" />
+            </div>
+
+            <div class="opt-group">
+              <label class="opt"><input type="checkbox" id="optHideNative" /> 隐藏 B 站原有的「稍后再看」按钮</label>
+              <p class="hint">开启后卡片上的原版按钮不再出现，避免与「+ 稍后」重叠。</p>
+            </div>
+
+            <div class="opt-group">
+              <div class="opt-title">管理页主题</div>
+              <div class="seg" id="themeSeg">
+                <button class="seg-btn" type="button" data-theme="auto">跟随系统</button>
+                <button class="seg-btn" type="button" data-theme="light">浅色</button>
+                <button class="seg-btn" type="button" data-theme="dark">深色</button>
+              </div>
+            </div>
+
+            <button id="btnResetPos" class="btn tiny" type="button">恢复默认位置（左上角）</button>
+          </div>
         </div>
       </div>
     </section>
@@ -94,8 +96,8 @@
       <button id="storageToggle" class="storage-head" type="button" aria-expanded="false">
         <span class="chev" aria-hidden="true">›</span>
         <span class="head-main">
-          <span class="head-title">数据保存在本机</span>
-          <span class="head-sub">扩展 ID、数据目录与占用</span>
+          <span class="head-title">存储位置与备份</span>
+          <span class="head-sub">扩展 ID、数据目录、占用与备份提示</span>
         </span>
       </button>
       <div id="storageBody" class="storage-body">

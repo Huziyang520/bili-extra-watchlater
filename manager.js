@@ -275,15 +275,12 @@
 
   var mq = window.matchMedia('(prefers-color-scheme: dark)');
   var saveTimer = 0;
-  var PREVIEW_KEY = 'bew.mgr.preview';
-  var previewCollapsed = false;
+  var CARD_KEY = 'bew.mgr.card';
 
-  function setPreviewCollapsed(collapsed) {
-    previewCollapsed = !!collapsed;
-    els.previewWrap.classList.toggle('collapsed', previewCollapsed);
-    els.settingsGrid.classList.toggle('preview-hidden', previewCollapsed);
-    els.togglePreview.textContent = previewCollapsed ? '展开' : '折叠';
-    els.togglePreview.setAttribute('aria-expanded', previewCollapsed ? 'false' : 'true');
+  function setSettingsCollapsed(collapsed) {
+    els.settingsCard.classList.toggle('collapsed', !!collapsed);
+    els.settingsToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    if (!collapsed) requestAnimationFrame(renderPreview);
   }
 
   function applyTheme() {
@@ -311,6 +308,7 @@
   }
 
   function renderPreview() {
+    if (!state.cfg || !els.pvBar) return;
     var c = state.cfg.card;
     var bar = els.pvBar;
     var x = Math.min(100, Math.max(0, c.x));
@@ -351,10 +349,8 @@
   function bindSettings() {
     els.stage = $('stage');
     els.pvBar = $('pvBar');
-    els.previewWrap = $('previewWrap');
-    els.previewBody = $('previewBody');
-    els.togglePreview = $('btnTogglePreview');
-    els.settingsGrid = document.querySelector('.settings-grid');
+    els.settingsCard = $('settingsCard');
+    els.settingsToggle = $('settingsToggle');
     els.optIcon = $('optIcon');
     els.optLabel = $('optLabel');
     els.optMenu = $('optMenu');
@@ -399,13 +395,17 @@
       toast('位置已恢复为左上角', 'ok');
     });
 
-    els.togglePreview.addEventListener('click', function () {
-      setPreviewCollapsed(!els.previewWrap.classList.contains('collapsed'));
-      try { localStorage.setItem(PREVIEW_KEY, previewCollapsed ? '1' : '0'); } catch (err) { /* 隐私模式下忽略 */ }
+    els.settingsToggle.addEventListener('click', function () {
+      var collapsed = !els.settingsCard.classList.contains('collapsed');
+      setSettingsCollapsed(collapsed);
+      try { localStorage.setItem(CARD_KEY, collapsed ? '1' : '0'); } catch (err) { /* 隐私模式下忽略 */ }
     });
+    /* 默认折叠，只有用户手动展开过才保持展开 */
     try {
-      if (localStorage.getItem(PREVIEW_KEY) === '1') setPreviewCollapsed(true);
-    } catch (err) { /* 忽略 */ }
+      setSettingsCollapsed(localStorage.getItem(CARD_KEY) !== '0');
+    } catch (err) {
+      setSettingsCollapsed(true);
+    }
 
     els.storageToggle.addEventListener('click', function () {
       var collapsed = els.storageCard.classList.toggle('collapsed');
