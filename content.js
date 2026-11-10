@@ -144,7 +144,8 @@
   /* ---------- 卡片按钮 ---------- */
 
   var BTN_CSS = [
-    ':host { display: block; }',
+    ':host { display: block; opacity: 0; pointer-events: none; transition: opacity .16s ease; }',
+    ':host(.near) { opacity: 1; pointer-events: auto; }',
     '.bar {',
     '  all: initial;',
     '  box-sizing: border-box;',
@@ -261,7 +262,7 @@
 
     var slot = {
       host: host, root: root, cover: cover, bar: bar, btn: btn, more: more, sep: sep,
-      icon: icon, label: label, meta: meta, busy: false, added: false
+      icon: icon, label: label, meta: meta, busy: false, added: false, near: false
     };
 
     bar.addEventListener('pointerdown', function (e) { e.stopPropagation(); }, true);
@@ -599,6 +600,39 @@
       setAdded(slot, !!state.bvids[slot.meta.bvid]);
     }
     document.body.setAttribute('data-bew-slots', String(state.slots.length));
+    if (hoverPoint) updateHover();
+  }
+
+  /* ---------- 鼠标靠近才显示 ---------- */
+
+  var hoverPoint = null;
+  var hoverRaf = 0;
+
+  function updateHover() {
+    hoverRaf = 0;
+    if (!hoverPoint) return;
+    var x = hoverPoint.x;
+    var y = hoverPoint.y;
+    for (var i = 0; i < state.slots.length; i++) {
+      var slot = state.slots[i];
+      if (!slot.host.isConnected || !slot.root || !slot.root.isConnected) continue;
+      var r = slot.root.getBoundingClientRect();
+      var near = x >= r.left - 6 && x <= r.right + 6 && y >= r.top - 6 && y <= r.bottom + 6;
+      if (near !== slot.near) {
+        slot.near = near;
+        slot.host.classList.toggle('near', near);
+      }
+    }
+  }
+
+  function scheduleHover() {
+    if (!hoverPoint || hoverRaf) return;
+    hoverRaf = requestAnimationFrame(updateHover);
+  }
+
+  function onPointerMove(e) {
+    hoverPoint = { x: e.clientX, y: e.clientY };
+    scheduleHover();
   }
 
   function refreshStates() {
@@ -1035,6 +1069,15 @@
       window.addEventListener('popstate', scheduleScan);
       window.addEventListener('resize', applyCardStyleAll);
       document.addEventListener('pointerover', scheduleScan, true);
+      document.addEventListener('pointermove', onPointerMove, { passive: true });
+      window.addEventListener('scroll', scheduleHover, true);
+      window.addEventListener('resize', scheduleHover);
+      /* 触摸/无悬停设备没有 pointermove，直接常显 */
+      try {
+        if (window.matchMedia && window.matchMedia('(hover: none)').matches) {
+          for (var si = 0; si < state.slots.length; si++) state.slots[si].host.classList.add('near');
+        }
+      } catch (e) { /* 忽略 */ }
       /* 兜底：站点重建卡片内容后即使没有突变事件也能补回按钮 */
       setInterval(scheduleScan, 2500);
       var lastHref = location.href;
